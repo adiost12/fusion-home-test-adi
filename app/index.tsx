@@ -13,17 +13,53 @@ export default function Index() {
   const [port, setPort] = useState('')
   const [isSSL, setIsSSL] = useState(false)
 
-  const handleSubmit = useCallback(() => {
-    const submittedData = {
-      accountType,
-      userName,
-      password,
-      serverAddress,
-      serverPath,
-      port,
-      isSSL
+  //TODO validation in utils
+  const validateUserName = (value: string) => {
+    return value.length > 0
+  }
+
+  const validatePassword = (value: string) => {
+    return value.length > 12
+  }
+
+  const validateServerPath = (value: string) => {
+    if(value.length > 0) {
+      return value.match(/\/^[a-z0-9]+$/i)
     }
-    console.log(submittedData)
+    return true
+  }
+
+  const validatePort = (value: string) => {
+    return !isNaN(parseInt(value))
+  }
+
+  const handleSubmit = useCallback(() => {
+  if (accountType === 'manual') {
+    if (validateUserName(userName) && validatePassword(password)) {
+      console.log({
+        accountType,
+        userName,
+        password,
+        serverAddress
+      })
+    } else {
+      console.log('information not correct')
+    }
+  } else {
+    if (validateUserName(userName) && validatePassword(password) && validatePort(port) && validateServerPath(serverPath)) {
+      console.log({
+        accountType,
+        userName,
+        password,
+        serverAddress,
+        serverPath,
+        port,
+        isSSL
+      })
+    } else {
+      console.log('information not correct')
+    }
+  }
   }, [userName, password, serverAddress, serverPath, port, isSSL])
 
 //TODO finish styling, find better looking picker
@@ -92,7 +128,7 @@ export default function Index() {
           placeholder="/calendars/user/"
           onChangeText={setServerPath}
           enableErrors
-          validate={['required']}
+          validate={['required', (value: string) => value.match(/\/^[a-z0-9]+$/i)]}
           validationMessage={['Please provide server Path']}
           validateOnChange
           />
