@@ -24,7 +24,7 @@ export default function Index() {
 
   const validateServerPath = (value: string) => {
     if(value.length > 0) {
-      return value.match(/\/^[a-z0-9]+$/i)
+      return value.match(/^[a-z0-9]+$/i)
     }
     return true
   }
@@ -60,7 +60,7 @@ export default function Index() {
       console.log('information not correct')
     }
   }
-  }, [userName, password, serverAddress, serverPath, port, isSSL])
+  }, [userName, password, serverAddress, serverPath, port, isSSL, accountType])
 
 //TODO finish styling, find better looking picker
   return (
@@ -128,7 +128,7 @@ export default function Index() {
           placeholder="/calendars/user/"
           onChangeText={setServerPath}
           enableErrors
-          validate={['required', (value: string) => value.match(/\/^[a-z0-9]+$/i)]}
+          validate={['required', (value: string) => value.match(/^[a-z0-9]+$/i)]}
           validationMessage={['Please provide server Path']}
           validateOnChange
           />
